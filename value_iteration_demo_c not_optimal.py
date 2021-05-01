@@ -25,24 +25,13 @@ print_values(grid.rewards, grid)
 # choose an action and update randomly 
 policy = {}
 for s in grid.actions.keys():
-  policy[s] = np.random.choice(ALL_POSSIBLE_ACTIONS)
-
-# initial policy
-print("initial policy:")
-print_policy(policy, grid)
-print(grid.all_states())
-print(grid.actions)
+  policy[s] = grid.actions.get(s)#np.random.choice(ALL_POSSIBLE_ACTIONS)
 
 # initialize V(s) - value function
 V = {}
 states = grid.all_states()
 for s in states:
-  # V[s] = 0
-  if s in grid.actions:
-    V[s] = np.random.random()
-  else:
-    # terminal state
-    V[s] = 0
+  V[s] = 0
 
 # initial value for all states in grid
 print(V)
@@ -54,10 +43,9 @@ print_values(V, grid)
 iteration=0
 while True:
   iteration+=1
+  
   print("values %d: " % iteration)
   print_values(V, grid)
-  print("policy %d: " % iteration)
-  print_policy(policy, grid)
 
   biggest_change = 0
   for s in states:
@@ -65,36 +53,18 @@ while True:
 
     # V(s) only has value if it's not a terminal state
     if s in policy:
-      new_v = float('-inf')
-      for a in ALL_POSSIBLE_ACTIONS:
+      new_v = 0
+      for a in grid.actions.get(s):
         grid.set_state(s)
         r = grid.move(a)
-        v = r + GAMMA * V[grid.current_state()]
-        if v > new_v:
-          new_v = v
+        policy_prop = 1/len(grid.actions.get(s))
+        new_v += policy_prop * (r + GAMMA * V[grid.current_state()])
       V[s] = new_v
       biggest_change = max(biggest_change, np.abs(old_v - V[s]))
 
   if biggest_change < SMALL_ENOUGH:
     break
 
-# find a policy that leads to optimal value function
-for s in policy.keys():
-  best_a = None
-  best_value = float('-inf')
-  # loop through all possible actions to find the best current action
-  for a in ALL_POSSIBLE_ACTIONS:
-    grid.set_state(s)
-    r = grid.move(a)
-    v = r + GAMMA * V[grid.current_state()]
-    if v > best_value:
-      best_value = v
-      best_a = a
-  policy[s] = best_a
-
 # our goal here is to verify that we get the same answer as with policy iteration
 print("values:")
 print_values(V, grid)
-print("policy:")
-print_policy(policy, grid)
-print_moves_from_start(policy, grid, start_point, soldiers, king_point)

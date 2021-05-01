@@ -7,13 +7,13 @@ GAMMA = 0.9
 ALL_POSSIBLE_ACTIONS = ('UL', 'UR', 'DL', 'DR', 'LU', 'LD', 'RU', 'RD')
 start_point = (0, 0)
 soldiers = {(2, 4), (5, 5), (4, 3), (5, 2)}
-king_point = (8, 6)
+king_point = (6, 6)
 king_cost = 10
-soldier_cost = 7
+soldier_cost = 1
 soldier_aim_cost = -1
 step_cost = 0
-width = 10
-hight = 10
+width = 8
+hight = 8
 # this grid gives you a reward of -0.1
 # to find a shorter path to the goal, use negative grid
 grid = negative_grid(width, hight, start_point, soldiers, king_point, soldier_aim_cost, soldier_cost, king_cost, step_cost)

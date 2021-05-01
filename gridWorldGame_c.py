@@ -152,7 +152,7 @@ def standard_grid(width, hight, start_point, soldiers, king_point, soldier_aim_c
           possible_moves = possible_moves + ('RU', )
         else:
           possible_moves = possible_moves + ('RD', 'RU', )
-      if possible_moves.count != 0:
+      if possible_moves.count != 0 and (i, j) != king_loc:
         actions.update({(i, j): possible_moves})
       rewards.update({(i, j): step_cost})
       if (i, j) in soldiers: # i == soldier1_row and j == soldier1_col:
@@ -270,10 +270,10 @@ def draw_next_and_move(P, g, point):
   return next_point
 
 def print_moves_from_start(P, g, start, soliders, king):
-  g.draw.update({start: 'S'})
+  g.draw.update({start: 'n'})
   point = start
   step = 1
-  while point != king:
+  while point != () and point != king:
     next_point = draw_next_and_move(P, g, point)
     point = next_point
     g.draw.update({point: '{}'.format(step)})
@@ -281,7 +281,7 @@ def print_moves_from_start(P, g, start, soliders, king):
       
   g.draw.update({king: 'K'})
   for sol in soliders: 
-    g.draw.update({sol: 's'})
+    g.draw.update({sol: 'p'})
 
   for i in range(g.width):
     print("------------------------------------------------------------")
